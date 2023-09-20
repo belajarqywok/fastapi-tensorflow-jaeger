@@ -1,0 +1,511 @@
+{
+	"info": {
+		"_postman_id": "6ea54e53-22eb-497b-8f95-0d10e29d4652",
+		"name": "capstone-coba2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Predict Word",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('status code should be 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response header Content-Type should be application/json', () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type'))\r",
+							"        .to.equals('application/json');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should be an object', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should have correct property and value', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseJson).to.haveOwnProperty('message');\r",
+							"    pm.expect(responseJson).to.haveOwnProperty('status_code');\r",
+							"    pm.expect(responseJson).to.haveOwnProperty('data');\r",
+							"\r",
+							"    pm.expect(responseJson.message).to.equals('Predict Success');\r",
+							"    pm.expect(responseJson.status_code).to.equals(200);\r",
+							"    pm.expect(responseJson.data).to.be.an('string');\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{accessToken}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}:{{port}}/v1/predict?question=love",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"v1",
+						"predict"
+					],
+					"query": [
+						{
+							"key": "question",
+							"value": "love"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Predict Word",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://{{host}}:{{port}}/v1/predict?question=love",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"v1",
+								"predict"
+							],
+							"query": [
+								{
+									"key": "question",
+									"value": "love"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 20 Sep 2023 20:43:47 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "8478"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Predict Success\",\n    \"status_code\": 200,\n    \"data\": \"we naturally want to help a loved one who isnt feeling well. how we can or should help may seem fairly obvious when a loved one experiences a physical health problem, but many people say theyre not sure how to best help when a loved one experiences a mental illness like schizophrenia. here are some tips: you dont have to be an expert in schizophrenia, but learning more can help you understand whats going on. there are a lot of myths about schizophrenia, so its a good idea to find some trustworthy resources. our schizophrenia info sheet is a great place to start. you can also find a lot of information from the bc schizophrenia society. sometimes talking about problems or concerns can really help. its important to understand that talking about something difficult like experiences of schizophrenia can be very hard for your loved oneand the symptoms of schizophrenia can also make conversations difficult. if a loved one opens up to you, listen activelythat is, without distractions like your phone or the tv. really pay attention to what they have to say. give them time to finish their thoughts, even if it takes a bit longer than usual. listen with empathy and without judgement. even if you dont understand the problem or you see the problem in a different way, your main concern is the distress or difficult feelings your loved one is experiencing. you can find in-depth tips on listening and communicating well in module three of the family toolkit. some people are not ready to talk about everything at once, or at all. thats okay! respect your loved ones boundaries and let them tell you when theyre ready to talk. symptoms of schizophrenia like hallucinations (sensations that arent real, like hearing voices) or delusions (beliefs that cant be true, like believing that you are being followed by a spy) can take some time to stop even when people are receiving treatment and following their treatment plan. as a group, these very distressing symptoms are called psychosis. many people have a hard time responding to a loved ones hallucinations or delusions. its best to avoid arguing about these experiences. remember that delusion are symptoms of schizophreniathey are not thoughts that you can talk someone out of. telling someone that their experiences arent real or arent true doesnt help when the experiences feel very real to that person! a better approach is to empathize with the feelings that hallucinations or delusions bring upwithout confirming or denying the hallucination or delusion. for example, if a loved one is frustrated or upset when they hear voices, it isnt helpful to say something like, youre okay! it isnt real. i dont hear anything. instead, you might say, i can only image how upsetting that voice must be. i can see the voice makes you feel scared. know that with good treatment and support, symptoms like hallucinations and delusions become much easier for people to manage and lose importance. ask how you can help. when people experience a serious mental illness like schizophrenia, they may want to plan how they can take action if they start to feel unwell again, especially if they have dependent children. these plans, such as advanced directives or ulysses agreements, are made when a person feels well and are meant to communicate their wishes to loved ones and their care team. ask your loved one if they have a plan in place so you know what they need if they need help. if youd like to learn more about planning for care, see the bc schizophrenia society. if a loved one is experiencing an episode of psychosis or is recovering for an episode of psychosis, they might need extra help. for example, people who are actively experiencing hallucinations or delusions might need a lot of personal space and feel uncomfortable being around a lot of people or even making eye contact. when people are recovering from an episode of psychosis, they may need a quiet space and a lot of rest. sometimes people can get back into their usual routines fairly quickly, while other times it may take a lot of time (and effort) to get back into routines. keep in mind that too much help can be a bit counterproductive. it may well be faster and easier for you to take care of your loved ones tasks or chores yourself, but rebuilding activity and confidence are a big part of recovery. encourage and support your loved one as they take on daily responsibilities, and let them tell you when they need extra help. schizophrenia can be a difficult illnessfor everyone. during episodes of psychosis, your loved one may experience frightening sensations that you cant understand. they may act in ways that you dont understand. other symptoms of schizophrenia can make it hard for people to express emotions or feelings, communicate clearly, or seem interested in others. its important to know that these are symptoms of an illness. they are no ones fault, but they can still be hard to cope with. consider reaching out to a family and friends support group for your own support. the bc schizophrenia society has a directory of groups around bc at www.bcss.org/monthly-meetings-calendar/. as a family member, its important to take care of yourself. try to maintain your regular schedule and activities, such as your exercise routine and hobbies. ask another family member or good friend to provide help with caregiving, especially in the early days of your loved one's illness. if you need help balancing time for self-care with caregiving duties, check out the bc schizophrenia societys family respite program. try to maintain your friendships or the network of people that you have in your life. these will later become important supports as your loved one recovers. educate them and update them on your loved one's recovery. people are sometimes afraid to ask questions about schizophrenia and this will put them at ease. this is very important! you are not responsible for your loved ones treatment (unless your loved one is your child under 19), but you can support them. schizophrenia can make it difficult for people to make and go to appointments and follow their treatment plan. with your loved ones permission, you may choose to help by reminding them of appointments, taking them to appointments, or whatever helps in your situation. if your loved one isnt happy with their treatment or would like to try a new approach, you can encourage them to talk with their care team, like their doctor or mental health teamit can be dangerous to stop or change a treatment without a doctors support. treatment can be a difficult area for loved ones. its hard to see someone you love in pain. you might be scared of the things your loved one is experiencing. you want to help. but in order for any treatment to work, your loved one needs to be active in their care. forcing or threatening treatment generally doesnt work (or if it does, in the case of an emergency, only for a short time) and can often hurt everyone involved. in most cases, anyone 19 years of age and older and not at risk of harm is free to make their own choices. and their choices may include refusing treatment or choosing a treatment that you disagree with. it helps everyone if you can be respectful and keep honest communication open between you. you can learn more about dealing with this situation in q&a: an adult in my life seems ill and wont find help. what can i do?. if you think your loved one is at risk of harming themselves or others and they refuse help, it is possible to have them evaluated by a psychiatrist under the mental health act. this process may involve police and other first responders, and it can be a difficult and stressful process for everyone. but it can also be a necessary step if someone is in danger. you can learn more about the mental health act in the info sheet families coping with a crisis and you can find the guide to the mental health act at www.health.gov.bc.ca/library/publications/year/2005/mentalhealthguide.pdf. for a more in-depth discussion of the mental health act, see a video with lawyer and health law consultation gerrit clements. if your loved one says that they have thoughts of ending their life, its important to take action. call 1-800-suicide (1-800-784-2433) at any time or message online at www.crisiscentrechat.ca between noon and 1am. if you think your loved one is in immediate danger, you can always call 911 or go to a hospital emergency room.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('status code should be 201', () => {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"\r",
+							"pm.test('response header Content-Type should be application/json', () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type'))\r",
+							"        .to.equals('application/json');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should be an object', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should have correct property and value', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseJson).to.haveOwnProperty('message');\r",
+							"    pm.expect(responseJson).to.haveOwnProperty('status_code');\r",
+							"    pm.expect(responseJson).to.haveOwnProperty('data');\r",
+							"\r",
+							"    pm.expect(responseJson.message).to.equals('Register Success');\r",
+							"    pm.expect(responseJson.status_code).to.equals(201);\r",
+							"    pm.expect(responseJson.data).to.equals(null);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nickname\" : \"qywok\",\r\n    \"fullname\" : \"qywok123\",\r\n    \"birth_date\" : \"2003-05-09\",\r\n    \"email\" : \"testy@test.com\",\r\n    \"password\" : \"gasel237\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/v1/register",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nickname\" : \"qywok\",\r\n    \"fullname\" : \"qywok123\",\r\n    \"birth_date\" : \"2003-05-09\",\r\n    \"email\" : \"testy@test.com\",\r\n    \"password\" : \"gasel237\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/v1/register",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"v1",
+								"register"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 20 Sep 2023 20:51:43 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "60"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Register Success\",\n    \"status_code\": 201,\n    \"data\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('status code should be 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response header Content-Type should be application/json', () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type'))\r",
+							"        .to.equals('application/json');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should be an object', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should have correct property and value', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseJson).to.haveOwnProperty('message');\r",
+							"    pm.expect(responseJson).to.haveOwnProperty('status_code');\r",
+							"    pm.expect(responseJson).to.haveOwnProperty('data');\r",
+							"\r",
+							"    pm.expect(responseJson.message).to.equals('Login Success');\r",
+							"    pm.expect(responseJson.status_code).to.equals(200);\r",
+							"    pm.expect(responseJson.data).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body data should contain access_token', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    const { data } = responseJson;\r",
+							"\r",
+							"    // access token test value\r",
+							"    pm.expect(data).to.haveOwnProperty('access_token');\r",
+							"    pm.expect(data.access_token).to.not.equals('');\r",
+							"\r",
+							"    // access token test value\r",
+							"    pm.expect(data).to.haveOwnProperty('refresh_token');\r",
+							"    pm.expect(data.refresh_token).to.not.equals('');\r",
+							"\r",
+							"    // add access token and refresh token in environment\r",
+							"    pm.environment.set('accessToken', data.access_token);\r",
+							"    pm.environment.set('refreshToken', data.refresh_token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\" : \"test6@test.com\",\r\n    \"password\" : \"gasel237\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/v1/login",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\" : \"test6@test.com\",\r\n    \"password\" : \"gasel237\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/v1/login",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"v1",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 20 Sep 2023 20:41:08 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "507"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Login Success\",\n    \"status_code\": 200,\n    \"data\": {\n        \"access_token\": \"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NGZkNmI1Yi03OTg5LTQ3NDItYjNmZS1lYjYxZTZiODE5OTkiLCJleHAiOjE2OTUyNDYwNjl9.9BcxvKSb_5Le7LNyWJEPYnlmcOGTkbKv68bt4rZM-WgmLpA-_VPrvm_ngJtK-Tuv2hMcBL27QjZZk33RIGGvrQ\",\n        \"refresh_token\": \"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NGZkNmI1Yi03OTg5LTQ3NDItYjNmZS1lYjYxZTZiODE5OTkiLCJleHAiOjE2OTU4NDcyNjl9.Z-nii4kBppk_HPKPvv4uMkJ-GZQOEv-X2d03RygFxKL6kZz5JJTTG3gkxMPWkoweR4sBDftdV20fPLes0HS8Ag\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Refresh Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test('status code should be 200', () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test('response header Content-Type should be application/json', () => {\r",
+							"    pm.expect(pm.response.headers.get('Content-Type'))\r",
+							"        .to.equals('application/json');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should be an object', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body should have correct property and value', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseJson).to.haveOwnProperty('message');\r",
+							"    pm.expect(responseJson).to.haveOwnProperty('status_code');\r",
+							"    pm.expect(responseJson).to.haveOwnProperty('data');\r",
+							"\r",
+							"    pm.expect(responseJson.message).to.equals('Refresh Token Success');\r",
+							"    pm.expect(responseJson.status_code).to.equals(200);\r",
+							"    pm.expect(responseJson.data).to.be.an('object');\r",
+							"});\r",
+							"\r",
+							"pm.test('response body data should contain access_token', () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    const { data } = responseJson;\r",
+							"\r",
+							"    // access token test value\r",
+							"    pm.expect(data).to.haveOwnProperty('access_token');\r",
+							"    pm.expect(data.access_token).to.not.equals('');\r",
+							"\r",
+							"    // access token test value\r",
+							"    pm.expect(data).to.haveOwnProperty('refresh_token');\r",
+							"    pm.expect(data.refresh_token).to.not.equals('');\r",
+							"\r",
+							"    // add access token and refresh token in environment\r",
+							"    pm.environment.set('accessToken', data.access_token);\r",
+							"    pm.environment.set('refreshToken', data.refresh_token);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"refresh_token\": \"{{refreshToken}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}:{{port}}/v1/refresh",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"v1",
+						"refresh"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Refresh Token",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refresh_token\": \"{{refreshToken}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://{{host}}:{{port}}/v1/refresh",
+							"protocol": "http",
+							"host": [
+								"{{host}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"v1",
+								"refresh"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "date",
+							"value": "Wed, 20 Sep 2023 20:45:32 GMT"
+						},
+						{
+							"key": "server",
+							"value": "uvicorn"
+						},
+						{
+							"key": "content-length",
+							"value": "515"
+						},
+						{
+							"key": "content-type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Refresh Token Success\",\n    \"status_code\": 200,\n    \"data\": {\n        \"access_token\": \"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NGZkNmI1Yi03OTg5LTQ3NDItYjNmZS1lYjYxZTZiODE5OTkiLCJleHAiOjE2OTUyNDYzMzJ9.HDtdpnSFcOCBTX9EuwL8fbI28VrExCQfy6nwhdUKqYtl8jAAQsDYDeYLgO-f7zMFHmNkt7qbOUNn4rysVhYS3g\",\n        \"refresh_token\": \"eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI0NGZkNmI1Yi03OTg5LTQ3NDItYjNmZS1lYjYxZTZiODE5OTkiLCJleHAiOjE2OTU4NDc1MzJ9.Ba3YGir_EC-uiDVhu91ebISfB8TpHyE6fCpF1k8fKt_Q5W_fco_cR9LdY_gLnV1lNTSEPrIISr4jGGKKsFwcEA\"\n    }\n}"
+				}
+			]
+		}
+	]
+}

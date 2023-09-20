@@ -1,0 +1,3 @@
+[flake8]
+exclude = .git, deployment, Include, Lib, ml_models, Scripts
+max-line-length = 120
