@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.configurations.databases.postgresql import Session
 from src.routes import (
     user_routes,
-    predict_routes
+    ml_routes
 )
 
 load_dotenv()
@@ -29,15 +29,15 @@ REST.add_middleware(
 
 # Include predict route group
 REST.include_router(
-    router = predict_routes.route,
-    prefix = f'/{os.getenv("VERSION")}',
+    router = ml_routes.route,
+    prefix = f'/{os.getenv("VERSION")}/vertx',
     tags = ["Predict"],
 )
 
 # Include user route group
 REST.include_router(
     router = user_routes.route,
-    prefix = f'/{os.getenv("VERSION")}',
+    prefix = f'/{os.getenv("VERSION")}/auth',
     tags = ["User"],
 )
 
