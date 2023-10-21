@@ -1,0 +1,8 @@
+postman
+deployment
+Makefile
+
+.env
+.flake8
+jaeger.py
+alembic.ini

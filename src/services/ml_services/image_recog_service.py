@@ -21,6 +21,10 @@ class image_recog_service:
         with open(dest, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
 
-        return self.__IMAGE_RECOG_UTILS.get_object_name(
+        object_name = self.__IMAGE_RECOG_UTILS.get_object_name(
             filename = file.filename
         )
+
+        os.remove(f"./uploads/{file.filename}")
+
+        return object_name

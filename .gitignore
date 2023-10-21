@@ -1,7 +1,20 @@
-pyvenv.cfg
-activate.bat
+__pycache__
 
-venv
+src/alembic/__pycache__
+src/configurations/databases/__pycache__
+src/controllers/auth_controllers/__pycache__
+src/controllers/ml_controllers/__pycache__
+src/models/__pycache__
+src/repositories/auth_controllers/__pycache__
+src/routes/__pycache__
+src/schemas/__pycache__
+src/services/auth_services/__pycache__
+src/services/ml_services/__pycache__
+src/utilities/__pycache__
+
 Include
 Lib
 Scripts
+
+pyvenv.cfg
+activate.bat

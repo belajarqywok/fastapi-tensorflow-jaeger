@@ -9,7 +9,12 @@ load_dotenv()
 
 # Create Engine
 engine: Engine = create_engine(
-    url = os.getenv("POSTGRES_URL")
+    url = (
+        f'postgresql+psycopg2://' +
+        f'{os.getenv("POSTGRES_USER")}:{os.getenv("POSTGRES_PASS")}' +
+        f'@{os.getenv("POSTGRES_HOST")}:{os.getenv("POSTGRES_PORT")}/' +
+        f'{os.getenv("POSTGRES_DB")}'
+    )
 )
 
 # Session
