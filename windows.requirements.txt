@@ -64,6 +64,7 @@ psycopg2==2.9.7
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pycodestyle==2.11.0
+pillow==10.0.1
 pycparser==2.21
 pydantic==2.2.1
 pydantic_core==2.6.1
@@ -87,14 +88,13 @@ tensorboard==2.13.0
 tensorboard-data-server==0.7.1
 tensorflow==2.13.0
 tensorflow-estimator==2.13.0
-tensorflow-intel==2.13.0
+tensorflow==2.13.0
 tensorflow-io-gcs-filesystem==0.31.0
 termcolor==2.3.0
 threadloop==1.0.2
 threadpoolctl==3.2.0
 thrift==0.16.0
 tornado==5.1.1
-typing_extensions==4.7.1
 urllib3==1.26.16
 uvicorn==0.23.2
 Werkzeug==2.3.7

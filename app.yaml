@@ -1,0 +1,54 @@
+runtime: python39
+instance_class: F1
+entrypoint: |
+  python3 -m pip install --upgrade pip
+  pip3 install -r linux.requirements.txt
+  alembic upgrade head
+  uvicorn --host 0.0.0.0 --port 80 --workers 10 main:REST
+
+runtime_config:
+  operating_system: ubuntu22
+
+service_account: petdoc-capstone-project@appspot.gserviceaccount.com
+
+vpc_access_connector:
+  name: projects/petdoc-capstone-project/locations/asia-southeast2/connectors/cloudrun-connector
+
+beta_settings:
+  cloud_sql_instances: INSTANCE_CONNECTION_NAME=tcp:5432
+
+env_variables:
+  MY_VAR: "my value"
+
+automatic_scaling:
+  target_cpu_utilization: 0.90
+  min_instances: 1
+  max_instances: 3
+  min_pending_latency: 800ms
+  max_pending_latency: automatic
+  max_concurrent_requests: 80
+
+resources:
+  cpu: 2
+  memory_gb: 2
+  disk_size_gb: 10
+  volumes:
+  - name: ramdisk1
+    volume_type: tmpfs
+    size_gb: 0.5
+
+liveness_check:
+  path: "/liveness_check"
+  check_interval_sec: 30
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+
+readiness_check:
+  path: "/readiness_check"
+  check_interval_sec: 5
+  timeout_sec: 4
+  failure_threshold: 2
+  success_threshold: 2
+  app_start_timeout_sec: 300
+    
