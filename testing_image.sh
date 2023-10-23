@@ -38,6 +38,8 @@ docker container create --name ml_service \
 
 echo "[-  Start Container  -]"
 docker container start pgserver
+echo "[-  WAIT... (5 seconds)  -]"
+sleep 5
 docker container start ml_service
 
 echo "[-  WAIT... (5 seconds)  -]"
