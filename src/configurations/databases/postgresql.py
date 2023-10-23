@@ -23,10 +23,10 @@ class Engines:
         # UNIX Socket Engine
         self.unix_sock_engine: Engine = create_engine(
             engine.url.URL.create(
-                drivername = "postgresql+psycopg2",
-                username = {os.getenv("POSTGRES_USER")},
-                password = {os.getenv("POSTGRES_PASS")},
-                database = {os.getenv("POSTGRES_DB")},
+                drivername = 'postgresql+psycopg2',
+                username = f'{os.getenv("POSTGRES_USER")}',
+                password = f'{os.getenv("POSTGRES_PASS")}',
+                database = f'{os.getenv("POSTGRES_DB")}',
                 query = {
                     "unix_sock": (
                         f'{os.getenv("POSTGRES_HOST")}' + 
