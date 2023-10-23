@@ -4,8 +4,9 @@ from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from src.configurations.databases.postgresql import Session
 from src.routes import (
+    ml_routes,
     user_routes,
-    ml_routes
+    main_routes
 )
 
 load_dotenv()
@@ -41,7 +42,15 @@ REST.include_router(
     tags = ["User"],
 )
 
+# Include main route group
+REST.include_router(
+    router = main_routes.route,
+    prefix = f'',
+    tags = ["Main"],
+)
+
 @REST.on_event("shutdown")
 async def shutdown_event():
     # Database Connection Close
     DATABASE.close()
+    

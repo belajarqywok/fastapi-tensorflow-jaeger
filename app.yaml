@@ -16,7 +16,17 @@ beta_settings:
   cloud_sql_instances: INSTANCE_CONNECTION_NAME=tcp:5432
 
 env_variables:
-  MY_VAR: "my value"
+  VERSION: v1
+  JWT_ACCESS_TOKEN_SECRET: AHBiadbiaeud92uedb9ub9wue92
+  JWT_REFRESH_TOKEN_SECRET: eu92uidbsAHBiadbiauedb9ub9wue92eu
+  JWT_ALGORITHM: HS512
+  JWT_ACCESS_TOKEN_EXPIRE: 1
+  JWT_REFRESH_TOKEN_EXPIRE: 7
+  POSTGRES_HOST: "127.0.0.1"
+  POSTGRES_PORT: 5432
+  POSTGRES_USER: postgres
+  POSTGRES_PASS: admin
+  POSTGRES_DB: coba_capstone
 
 automatic_scaling:
   target_cpu_utilization: 0.90
