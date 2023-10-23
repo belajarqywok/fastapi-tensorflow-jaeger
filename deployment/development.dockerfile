@@ -9,7 +9,7 @@ WORKDIR /etc/petdoc_backend_service
 
 COPY linux.requirements.txt /etc/petdoc_backend_service/
 RUN python3 -m pip install --upgrade pip
-RUN pip3 install -r requirements.txt
+RUN pip3 install -r linux.requirements.txt
 COPY . /etc/petdoc_backend_service/
 
 EXPOSE 80
