@@ -1,8 +1,14 @@
-postman
 deployment
-Makefile
+postman
+.vscode
+.git
 
 .env
 .flake8
+Makefile
 jaeger.py
-alembic.ini
+.gitignore
+.gcloudignore
+app.yaml
+entrypoint.sh
+windows.requirements.txt
