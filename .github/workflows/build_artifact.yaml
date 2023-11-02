@@ -52,6 +52,7 @@ jobs:
         version: 1.0-ip
         project_id: ${{ secrets.GOOGLE_PROJECT }}
       run: |
+        ls -al
         docker build --tag ml_service:$version \
           --file deployment/development.dockerfile .
 
