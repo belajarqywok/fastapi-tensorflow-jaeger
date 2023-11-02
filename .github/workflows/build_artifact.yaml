@@ -37,14 +37,15 @@ jobs:
     needs: testing
 
     steps:
-    - name: Code Checkout
-      uses: actions/checkout@v2
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
 
     - name: Setup Google Cloud
-      uses: google-github-actions/setup-gcloud@v0
+      uses: google-github-actions/setup-gcloud@v1
       with:
         project_id: ${{ secrets.GOOGLE_PROJECT }}
-        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
         export_default_credentials: true
 
     # Push Docker Image to Google Container Registry
