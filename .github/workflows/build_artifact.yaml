@@ -52,7 +52,6 @@ jobs:
         version: 1.0-ip
         project_id: ${{ secrets.GOOGLE_PROJECT }}
       run: |
-        # gcloud auth configure-docker --quiet
         docker build --tag ml_service:$version \
           --file deployment/development.dockerfile .
 
