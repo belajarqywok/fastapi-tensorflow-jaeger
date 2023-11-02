@@ -56,7 +56,7 @@ jobs:
 
         git clone https://github.com/belajarqywok/fastapi-tensorflow-jaeger
         cd fastapi-tensorflow-jaeger
-        
+
         docker build --tag ml_service:$version \
           --file deployment/development.dockerfile .
 
@@ -95,4 +95,4 @@ jobs:
     # Deploy to Google Cloud Run
     - name: Deploy to Google Cloud Run
       run: |
-        echo "deploy to cloud run"
+        echo "deploy to google cloud run"
