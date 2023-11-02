@@ -52,9 +52,11 @@ jobs:
         version: 1.0-ip
         project_id: ${{ secrets.GOOGLE_PROJECT }}
       run: |
+        gcloud auth configure-docker --quiet
+
         git clone https://github.com/belajarqywok/fastapi-tensorflow-jaeger
         cd fastapi-tensorflow-jaeger
-        ls -al
+        
         docker build --tag ml_service:$version \
           --file deployment/development.dockerfile .
 
