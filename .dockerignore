@@ -11,4 +11,5 @@ jaeger.py
 .gcloudignore
 app.yaml
 entrypoint.sh
+pyproject.toml
 windows.requirements.txt

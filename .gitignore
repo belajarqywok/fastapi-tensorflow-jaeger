@@ -18,3 +18,4 @@ Scripts
 
 pyvenv.cfg
 activate.bat
+.coverage

@@ -42,4 +42,5 @@ activate.bat
 .flake8
 Makefile
 jaeger.py
-windows.requirements.txt
+windows.requirements.tx
+pyproject.toml

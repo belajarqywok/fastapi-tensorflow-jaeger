@@ -1,0 +1,94 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+permissions:
+  contents: read
+
+jobs:
+  # Testing
+  testing:
+    name: Testing
+    runs-on: ubuntu-latest
+    environment: testing
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Testing
+      run: |
+        pip3 install nose2 nose2[coverage_plugin]
+        nose2 --start-dir tests \
+          --verbose \
+          --pretty-assert \
+          --with-coverage
+
+  # Build
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: build
+    needs: testing
+
+    steps:
+    - name: Code Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Google Cloud
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GOOGLE_PROJECT }}
+        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        export_default_credentials: true
+
+    # Push Docker Image to Google Container Registry
+    - name: Push Docker Image to Google Container Registry
+      env:
+        version: 1.0-ip
+        project_id: ${{ secrets.GOOGLE_PROJECT }}
+      run: |
+        docker build --tag ml_service:$version \
+          --file deployment/development.dockerfile .
+
+        docker tag ml_service:$version \
+          gcr.io/petdoc-capstone-project/ml_service:$version
+
+        docker push gcr.io/$project_id/ml_service:$version
+
+    # - name: Push Docker Image to Google Artifact Registry
+    #   env:
+    #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+    #   run: |
+    #     gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+    #     docker build -t asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest .
+    #     docker push asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest
+
+
+  # Deploy
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: deploy
+    needs: build
+
+    steps:
+    - name: Code Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup Google Cloud
+      uses: google-github-actions/setup-gcloud@v0
+      with:
+        project_id: ${{ secrets.GOOGLE_PROJECT }}
+        service_account_key: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+        export_default_credentials: true
+
+    # Deploy to Google Cloud Run
+    - name: Deploy to Google Cloud Run
+      run: |
+        echo "test"
