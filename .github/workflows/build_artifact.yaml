@@ -52,7 +52,7 @@ jobs:
         version: 1.0-ip
         project_id: ${{ secrets.GOOGLE_PROJECT }}
       run: |
-        ls -al
+        git clone https://github.com/belajarqywok/fastapi-tensorflow-jaeger .
         docker build --tag ml_service:$version \
           --file deployment/development.dockerfile .
 
