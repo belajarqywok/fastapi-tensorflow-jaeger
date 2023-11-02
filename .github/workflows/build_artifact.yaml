@@ -48,17 +48,18 @@ jobs:
         export_default_credentials: true
 
     # Push Docker Image to Google Container Registry
+    # --- DEPRECATED ---
     - name: Push Docker Image to Google Container Registry
       env:
         version: 1.0-ip
         project_id: ${{ secrets.GOOGLE_PROJECT }}
       run: |
-        gcloud auth configure-docker
+        gcloud auth configure-docker --quiet
         docker build --tag ml_service:$version \
           --file deployment/development.dockerfile .
 
         docker tag ml_service:$version \
-          gcr.io/petdoc-capstone-project/ml_service:$version
+          gcr.io/$project_id/ml_service:$version
 
         docker push gcr.io/$project_id/ml_service:$version
 
