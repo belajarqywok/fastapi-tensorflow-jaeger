@@ -44,9 +44,6 @@ jobs:
 
     - name: Setup Google Cloud
       uses: google-github-actions/setup-gcloud@v1
-      with:
-        project_id: ${{ secrets.GOOGLE_PROJECT }}
-        export_default_credentials: true
 
     # Push Docker Image to Google Container Registry
     # --- DEPRECATED ---
@@ -55,7 +52,7 @@ jobs:
         version: 1.0-ip
         project_id: ${{ secrets.GOOGLE_PROJECT }}
       run: |
-        gcloud auth configure-docker --quiet
+        # gcloud auth configure-docker --quiet
         docker build --tag ml_service:$version \
           --file deployment/development.dockerfile .
 
