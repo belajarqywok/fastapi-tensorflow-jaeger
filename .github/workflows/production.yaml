@@ -108,19 +108,19 @@ jobs:
         image: gcr.io/${{ secrets.GOOGLE_PROJECT }}/ml-service:1.0
         region: asia-southeast2
         flags: |
-          --cpu=4 \\
-          --port=80 \\
-          --cpu-boost \\
-          --memory=4Gi \\
-          --timeout=800 \\
-          --concurrency=80 \\
-          --min-instances=0 \\
-          --max-instances=13 \\
-          --project=${{ secrets.GOOGLE_PROJECT }} \\
-          --allow-unauthenticated \\
-          --vpc-egress=private-ranges-only \\
-          --vpc-connector=projects/${{ secrets.GOOGLE_PROJECT }}/locations/asia-southeast2/connectors/ml-service-connector \\
-          --service-account=${{ secrets.CLOUD_RUN_SA }}
+          --cpu=4 
+          --port=80 
+          --cpu-boost 
+          --memory=4Gi 
+          --timeout=800 
+          --concurrency=80 
+          --min-instances=0 
+          --max-instances=13 
+          --project=${{ secrets.GOOGLE_PROJECT }} 
+          --allow-unauthenticated 
+          --vpc-egress=private-ranges-only 
+          --vpc-connector=projects/${{ secrets.GOOGLE_PROJECT }}/locations/asia-southeast2/connectors/ml-service-connector 
+          --service-account=${{ secrets.CLOUD_RUN_SA }} 
 
         env_vars: |
           VERSION=$version
