@@ -117,10 +117,10 @@ jobs:
           --concurrency=80 \
           --min-instances=0 \
           --max-instances=13 \
-          --project=$project_id \
+          --project=${{ secrets.GOOGLE_PROJECT }} \
           --allow-unauthenticated \
           --vpc-egress=private-ranges-only \
-          --vpc-connector=projects/$project_id/locations/$region/connectors/$service-connector \
+          --vpc-connector=projects/${{ secrets.GOOGLE_PROJECT }}/locations/$region/connectors/$service-connector \
           --service-account=${{ secrets.CLOUD_RUN_SA }}
 
         env_vars: |
