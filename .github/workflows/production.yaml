@@ -1,0 +1,134 @@
+name: Production Pipeline
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+permissions:
+  contents: read
+
+env:
+  version: '1.0'
+  service: ml-service
+  region: asia-southeast2
+  project_id: ${{ secrets.GOOGLE_PROJECT }}
+
+jobs:
+  # Testing
+  testing:
+    name: Testing
+    runs-on: ubuntu-latest
+    environment: testing
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Unit Testing
+      run: |
+        pip3 install nose2 nose2[coverage_plugin]
+        nose2 --start-dir tests \
+          --verbose \
+          --pretty-assert \
+          --with-coverage
+
+
+  # Build
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: build
+    needs: testing
+
+    steps:
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ secrets.CONTAINER_REGISTRY_CREDENTIAL }}
+
+    - name: Setup Google Cloud
+      uses: google-github-actions/setup-gcloud@v1
+
+    - name: Setup Docker
+      run: gcloud auth configure-docker --quiet
+
+    # Push Docker Image to Google Container Registry
+    # --- DEPRECATED ---
+    # Container Registry is deprecated. After May 15, 2024,
+    # Artifact Registry will host images for the gcr.io domain
+    # in projects without previous Container Registry usage.
+    - name: Push Docker Image to Google Container Registry
+      run: |
+        git clone https://github.com/belajarqywok/fastapi-tensorflow-jaeger
+        cd fastapi-tensorflow-jaeger
+
+        docker build --tag $service:$version \
+          --file deployment/development.dockerfile .
+
+        docker tag $service:$version \
+          gcr.io/$project_id/$service:$version
+
+        docker push gcr.io/$project_id/$service:$version
+
+    # - name: Push Docker Image to Google Artifact Registry
+    #   env:
+    #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+    #   run: |
+    #     gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+    #     docker build -t asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest .
+    #     docker push asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest
+
+
+  # Deploy
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: deploy
+    needs: build
+
+    steps:
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ secrets.CLOUD_RUN_CREDENTIAL }}
+
+    # Deploy to Google Cloud Run
+    - id: 'deploy'
+      uses: 'google-github-actions/deploy-cloudrun@v1'
+      with:
+        service: $service
+        image: gcr.io/$project_id/$service:$version
+        region: $region
+        flags: |
+          --cpu=4 \
+          --port=80 \
+          --cpu-boost \
+          --memory=4Gi \
+          --timeout=800 \
+          --concurrency=80 \
+          --min-instances=0 \
+          --max-instances=13 \
+          --project=$project_id \
+          --allow-unauthenticated \
+          --vpc-egress=private-ranges-only \
+          --vpc-connector=projects/$project_id/locations/$region/connectors/$service-connector \
+          --service-account=${{ secrets.CLOUD_RUN_SA }}
+
+        env_vars: |
+          VERSION=$version
+          JWT_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ACCESS_TOKEN_SECRET }}
+          JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET }}
+          JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}
+          JWT_ACCESS_TOKEN_EXPIRE=${{ secrets.JWT_ACCESS_TOKEN_EXPIRE }}
+          JWT_REFRESH_TOKEN_EXPIRE=${{ secrets.JWT_REFRESH_TOKEN_EXPIRE }}
+          POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}
+          POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASS=${{ secrets.POSTGRES_PASS }}
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+
+    - name: 'Cloud Run URL Output'
+      run: 'echo "${{ steps.deploy.outputs.url }}"'
