@@ -98,6 +98,9 @@ jobs:
       with:
         credentials_json: ${{ secrets.CLOUD_RUN_CREDENTIAL }}
 
+    - name: Setup Google Cloud
+      uses: google-github-actions/setup-gcloud@v1
+
     # Deploy to Google Cloud Run
     - id: 'deploy'
       uses: 'google-github-actions/deploy-cloudrun@v1'
