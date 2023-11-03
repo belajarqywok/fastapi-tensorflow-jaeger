@@ -102,7 +102,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v1
 
     # Deploy to Google Cloud Run
-    - id: 'deploy'
+    - name: Deploy to Google Cloud Run
       uses: 'google-github-actions/deploy-cloudrun@v1'
       with:
         service: $service
