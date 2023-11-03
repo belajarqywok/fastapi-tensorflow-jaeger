@@ -130,5 +130,5 @@ jobs:
           POSTGRES_PASS=${{ secrets.POSTGRES_PASS }}
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
 
-    - name: 'Cloud Run URL Output'
-      run: 'echo "${{ steps.deploy.outputs.url }}"'
+    # - name: 'Cloud Run URL Output'
+    #   run: 'echo "${{ steps.deploy.outputs.url }}"'
