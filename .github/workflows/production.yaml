@@ -36,50 +36,50 @@ jobs:
           --with-coverage
 
 
-  # Build
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    environment: build
-    needs: testing
+  # # Build
+  # build:
+  #   name: Build
+  #   runs-on: ubuntu-latest
+  #   environment: build
+  #   needs: testing
 
-    steps:
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v1'
-      with:
-        credentials_json: ${{ secrets.CONTAINER_REGISTRY_CREDENTIAL }}
+  #   steps:
+  #   - id: 'auth'
+  #     uses: 'google-github-actions/auth@v1'
+  #     with:
+  #       credentials_json: ${{ secrets.CONTAINER_REGISTRY_CREDENTIAL }}
 
-    - name: Setup Google Cloud
-      uses: google-github-actions/setup-gcloud@v1
+  #   - name: Setup Google Cloud
+  #     uses: google-github-actions/setup-gcloud@v1
 
-    - name: Setup Docker
-      run: gcloud auth configure-docker --quiet
+  #   - name: Setup Docker
+  #     run: gcloud auth configure-docker --quiet
 
-    # Push Docker Image to Google Container Registry
-    # --- DEPRECATED ---
-    # Container Registry is deprecated. After May 15, 2024,
-    # Artifact Registry will host images for the gcr.io domain
-    # in projects without previous Container Registry usage.
-    - name: Push Docker Image to Google Container Registry
-      run: |
-        git clone https://github.com/belajarqywok/fastapi-tensorflow-jaeger
-        cd fastapi-tensorflow-jaeger
+  #   # Push Docker Image to Google Container Registry
+  #   # --- DEPRECATED ---
+  #   # Container Registry is deprecated. After May 15, 2024,
+  #   # Artifact Registry will host images for the gcr.io domain
+  #   # in projects without previous Container Registry usage.
+  #   - name: Push Docker Image to Google Container Registry
+  #     run: |
+  #       git clone https://github.com/belajarqywok/fastapi-tensorflow-jaeger
+  #       cd fastapi-tensorflow-jaeger
 
-        docker build --tag $service:$version \
-          --file deployment/development.dockerfile .
+  #       docker build --tag $service:$version \
+  #         --file deployment/development.dockerfile .
 
-        docker tag $service:$version \
-          gcr.io/$project_id/$service:$version
+  #       docker tag $service:$version \
+  #         gcr.io/$project_id/$service:$version
 
-        docker push gcr.io/$project_id/$service:$version
+  #       docker push gcr.io/$project_id/$service:$version
 
-    # - name: Push Docker Image to Google Artifact Registry
-    #   env:
-    #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-    #   run: |
-    #     gcloud auth configure-docker asia-southeast2-docker.pkg.dev
-    #     docker build -t asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest .
-    #     docker push asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest
+  #   # - name: Push Docker Image to Google Artifact Registry
+  #   #   env:
+  #   #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+  #   #   run: |
+  #   #     gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+  #   #     docker build -t asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest .
+  #   #     docker push asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest
 
 
   # Deploy
@@ -87,9 +87,12 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     environment: deploy
-    needs: build
+    # needs: build
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
