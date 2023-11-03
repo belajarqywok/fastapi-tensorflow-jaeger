@@ -104,6 +104,12 @@ jobs:
     # Deploy to Google Cloud Run
     - name: Deploy to Google Cloud Run
       uses: 'google-github-actions/deploy-cloudrun@v1'
+      env:
+        version: '1.0'
+        service: ml-service
+        region: asia-southeast2
+        project_id: ${{ secrets.GOOGLE_PROJECT }}
+        
       with:
         service: $service
         image: gcr.io/$project_id/$service:$version
