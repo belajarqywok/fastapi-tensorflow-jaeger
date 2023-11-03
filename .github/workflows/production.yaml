@@ -10,12 +10,6 @@ on:
 permissions:
   contents: read
 
-env:
-  version: '1.0'
-  service: ml-service
-  region: asia-southeast2
-  project_id: ${{ secrets.GOOGLE_PROJECT }}
-
 jobs:
   # Testing
   testing:
@@ -35,59 +29,63 @@ jobs:
           --pretty-assert \
           --with-coverage
 
+  # Build
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    environment: build
+    needs: testing
 
-  # # Build
-  # build:
-  #   name: Build
-  #   runs-on: ubuntu-latest
-  #   environment: build
-  #   needs: testing
+    env:
+      version: '1.0'
+      service: ml-service
+      region: asia-southeast2
+      project_id: ${{ secrets.GOOGLE_PROJECT }}
 
-  #   steps:
-  #   - id: 'auth'
-  #     uses: 'google-github-actions/auth@v1'
-  #     with:
-  #       credentials_json: ${{ secrets.CONTAINER_REGISTRY_CREDENTIAL }}
+    steps:
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        credentials_json: ${{ secrets.CONTAINER_REGISTRY_CREDENTIAL }}
 
-  #   - name: Setup Google Cloud
-  #     uses: google-github-actions/setup-gcloud@v1
+    - name: Setup Google Cloud
+      uses: google-github-actions/setup-gcloud@v1
 
-  #   - name: Setup Docker
-  #     run: gcloud auth configure-docker --quiet
+    - name: Setup Docker
+      run: gcloud auth configure-docker --quiet
 
-  #   # Push Docker Image to Google Container Registry
-  #   # --- DEPRECATED ---
-  #   # Container Registry is deprecated. After May 15, 2024,
-  #   # Artifact Registry will host images for the gcr.io domain
-  #   # in projects without previous Container Registry usage.
-  #   - name: Push Docker Image to Google Container Registry
-  #     run: |
-  #       git clone https://github.com/belajarqywok/fastapi-tensorflow-jaeger
-  #       cd fastapi-tensorflow-jaeger
+    # Push Docker Image to Google Container Registry
+    # --- DEPRECATED ---
+    # Container Registry is deprecated. After May 15, 2024,
+    # Artifact Registry will host images for the gcr.io domain
+    # in projects without previous Container Registry usage.
+    - name: Push Docker Image to Google Container Registry
+      run: |
+        git clone https://github.com/belajarqywok/fastapi-tensorflow-jaeger
+        cd fastapi-tensorflow-jaeger
 
-  #       docker build --tag $service:$version \
-  #         --file deployment/development.dockerfile .
+        docker build --tag $service:$version \
+          --file deployment/development.dockerfile .
 
-  #       docker tag $service:$version \
-  #         gcr.io/$project_id/$service:$version
+        docker tag $service:$version \
+          gcr.io/$project_id/$service:$version
 
-  #       docker push gcr.io/$project_id/$service:$version
+        docker push gcr.io/$project_id/$service:$version
 
-  #   # - name: Push Docker Image to Google Artifact Registry
-  #   #   env:
-  #   #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
-  #   #   run: |
-  #   #     gcloud auth configure-docker asia-southeast2-docker.pkg.dev
-  #   #     docker build -t asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest .
-  #   #     docker push asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest
-
+    # - name: Push Docker Image to Google Artifact Registry
+    #   env:
+    #     GOOGLE_PROJECT: ${{ secrets.GOOGLE_PROJECT }}
+    #   run: |
+    #     gcloud auth configure-docker asia-southeast2-docker.pkg.dev
+    #     docker build -t asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest .
+    #     docker push asia-southeast2-docker.pkg.dev/$GOOGLE_PROJECT/capstone/nginx:latest
 
   # Deploy
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
     environment: deploy
-    # needs: build
+    needs: build
 
     steps:
     - name: Checkout
@@ -104,17 +102,25 @@ jobs:
     # Deploy to Google Cloud Run
     - name: Deploy to Google Cloud Run
       uses: 'google-github-actions/deploy-cloudrun@v1'
-      env:
-        version: '1.0'
-        service: ml-service
-        region: asia-southeast2
-        project_id: ${{ secrets.GOOGLE_PROJECT }}
-        
+      id: deploy-cloud-run
       with:
         service: ml-service
         image: gcr.io/${{ secrets.GOOGLE_PROJECT }}/ml-service:1.0
         region: asia-southeast2
-        flags: --cpu=4 --port=80 --cpu-boost --memory=4Gi --timeout=800 --concurrency=80 --min-instances=0 --max-instances=13 --project=${{ secrets.GOOGLE_PROJECT }} --allow-unauthenticated --vpc-egress=private-ranges-only --vpc-connector=projects/${{ secrets.GOOGLE_PROJECT }}/locations/asia-southeast2/connectors/ml-service-connector --service-account=${{ secrets.CLOUD_RUN_SA }}
+        flags: |
+          --cpu=4 \\
+          --port=80 \\
+          --cpu-boost \\
+          --memory=4Gi \\
+          --timeout=800 \\
+          --concurrency=80 \\
+          --min-instances=0 \\
+          --max-instances=13 \\
+          --project=${{ secrets.GOOGLE_PROJECT }} \\
+          --allow-unauthenticated \\
+          --vpc-egress=private-ranges-only \\
+          --vpc-connector=projects/${{ secrets.GOOGLE_PROJECT }}/locations/asia-southeast2/connectors/ml-service-connector \\
+          --service-account=${{ secrets.CLOUD_RUN_SA }}
 
         env_vars: |
           VERSION=$version
@@ -129,6 +135,5 @@ jobs:
           POSTGRES_PASS=${{ secrets.POSTGRES_PASS }}
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
 
-    # - name: 'Cloud Run URL Output'
-    #   run: 'echo "${{ steps.deploy.outputs.url }}"'
-    
+    - name: 'Cloud Run URL Output'
+      run: 'echo "${{ steps.deploy-cloud-run.outputs.url }}"'
