@@ -43,6 +43,9 @@ jobs:
       project_id: ${{ secrets.GOOGLE_PROJECT }}
 
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      
     - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
