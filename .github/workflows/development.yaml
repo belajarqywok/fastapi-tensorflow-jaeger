@@ -84,21 +84,27 @@ jobs:
 
     - name: liveness checking
       run: |
-        for ((i = 1; i <= 10; i++)); do
-          sleep $i
-          docker logs ml_service
+        while true; do
+          if docker logs ml_service 2>&1 | grep -q "Application startup complete."; then
+            echo "Application startup is complete. Stopping the loop."
+            break
+          else
+            echo "Application startup is not complete. Continuing to check..."
+          fi
+          sleep 5
+          clear
         done
-    # curl http://127.0.0.1/liveness_check
+        curl http://$host/liveness_check
 
-    # - name: Performance & Load Testing
-    #   run: |
-    #     pip3 install locust
-    #     locust --headless \
-    #       --run-time 60s \
-    #       --users 400 \
-    #       --spawn-rate 50 \
-    #       -H http://127.0.0.1 \
-    #       --locustfile locust/configuration.py
+    - name: Performance & Load Testing
+      run: |
+        pip3 install locust
+        locust --headless \
+          --run-time 60s \
+          --users 400 \
+          --spawn-rate 50 \
+          -H http://$host \
+          --locustfile locust/configuration.py
 
   # Vulnerability Scanning
   vulnerability_scanning:
