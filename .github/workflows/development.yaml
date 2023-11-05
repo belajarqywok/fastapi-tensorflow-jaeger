@@ -26,7 +26,9 @@ jobs:
 
     - name: Unit Testing
       run: |
-        pip3 install nose2 nose2[coverage_plugin] numpy keras tensorflow
+        pip3 install nose2 nose2[coverage_plugin] \
+          numpy keras tensorflow keras_preprocessing
+          
         nose2 --start-dir tests \
           --verbose \
           --pretty-assert \
