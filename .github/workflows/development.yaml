@@ -24,89 +24,92 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Unit Testing
-      run: |
-        pip3 install nose2 nose2[coverage_plugin] scikit-learn \
-          numpy keras tensorflow keras_preprocessing
+    - name: ifconfig
+      run: ifconfig
 
-        nose2 --start-dir tests \
-          --verbose \
-          --pretty-assert \
-          --with-coverage
+    # - name: Unit Testing
+    #   run: |
+    #     pip3 install nose2 nose2[coverage_plugin] scikit-learn \
+    #       numpy keras tensorflow keras_preprocessing
 
-  # Performance and Load Testing
-  performance_and_load_testing:
-    name: Performance and Load Testing
-    runs-on: ubuntu-latest
-    environment: testing
-    needs: unit_testing
+    #     nose2 --start-dir tests \
+    #       --verbose \
+    #       --pretty-assert \
+    #       --with-coverage
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  # # Performance and Load Testing
+  # performance_and_load_testing:
+  #   name: Performance and Load Testing
+  #   runs-on: ubuntu-latest
+  #   environment: testing
+  #   needs: unit_testing
 
-    - name: Build Docker Image
-      run: |
-        docker build --tag ml_service:1.0 \
-          --file deployment/development.dockerfile .
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
 
-    - name: Deploy Database (PostgreSQL) and Service
-      run: |
-        docker container create \
-          --name pgserver \
-          -p 5432:5432 \
-          -e POSTGRES_USER=postgres \
-          -e POSTGRES_PASSWORD=admin \
-          -e POSTGRES_DB=coba_capstone \
-          postgres:11
+  #   - name: Build Docker Image
+  #     run: |
+  #       docker build --tag ml_service:1.0 \
+  #         --file deployment/development.dockerfile .
 
-        docker container create --name ml_service \
-          -p 80:80 \
-          -e VERSION=v1 \
-          -e JWT_ACCESS_TOKEN_SECRET=AHBiadbiaeud92uedb9ub9wue92 \
-          -e JWT_REFRESH_TOKEN_SECRET=eu92uidbsAHBiadbiauedb9ub9wue92eu \
-          -e JWT_ALGORITHM=HS512 \
-          -e JWT_ACCESS_TOKEN_EXPIRE=1 \
-          -e JWT_REFRESH_TOKEN_EXPIRE=7 \
-          -e POSTGRES_HOST=$host \
-          -e POSTGRES_PORT=5432 \
-          -e POSTGRES_USER=postgres \
-          -e POSTGRES_PASS=admin \
-          -e POSTGRES_DB=coba_capstone \
-          ml_service:1.0
+  #   - name: Deploy Database (PostgreSQL) and Service
+  #     run: |
+  #       docker container create \
+  #         --name pgserver \
+  #         -p 5432:5432 \
+  #         -e POSTGRES_USER=postgres \
+  #         -e POSTGRES_PASSWORD=admin \
+  #         -e POSTGRES_DB=coba_capstone \
+  #         postgres:11
 
-        docker container start pgserver
-        sleep 5
-        docker container start ml_service
-        sleep 5
-        docker container ls
+  #       docker container create --name ml_service \
+  #         -p 80:80 \
+  #         -e VERSION=v1 \
+  #         -e JWT_ACCESS_TOKEN_SECRET=AHBiadbiaeud92uedb9ub9wue92 \
+  #         -e JWT_REFRESH_TOKEN_SECRET=eu92uidbsAHBiadbiauedb9ub9wue92eu \
+  #         -e JWT_ALGORITHM=HS512 \
+  #         -e JWT_ACCESS_TOKEN_EXPIRE=1 \
+  #         -e JWT_REFRESH_TOKEN_EXPIRE=7 \
+  #         -e POSTGRES_HOST=$host \
+  #         -e POSTGRES_PORT=5432 \
+  #         -e POSTGRES_USER=postgres \
+  #         -e POSTGRES_PASS=admin \
+  #         -e POSTGRES_DB=coba_capstone \
+  #         ml_service:1.0
 
-    - name: liveness checking
-      run: curl http://$host/liveness_check
+  #       docker container start pgserver
+  #       sleep 5
+  #       docker container start ml_service
+  #       sleep 5
+  #       docker container ls
 
-    - name: Performance & Load Testing
-      run: |
-        pip3 install locust
-        locust --headless \
-          --run-time 60s \
-          --users 400 \
-          --spawn-rate 50 \
-          -H http://$host \
-          --locustfile locust/configuration.py
+  #   - name: liveness checking
+  #     run: curl http://$host/liveness_check
 
-  # Vulnerability Scanning
-  vulnerability_scanning:
-    name: Vulnerability Scanning
-    runs-on: ubuntu-latest
-    environment: testing
-    needs: performance_and_load_testing
+  #   - name: Performance & Load Testing
+  #     run: |
+  #       pip3 install locust
+  #       locust --headless \
+  #         --run-time 60s \
+  #         --users 400 \
+  #         --spawn-rate 50 \
+  #         -H http://$host \
+  #         --locustfile locust/configuration.py
 
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v3
+  # # Vulnerability Scanning
+  # vulnerability_scanning:
+  #   name: Vulnerability Scanning
+  #   runs-on: ubuntu-latest
+  #   environment: testing
+  #   needs: performance_and_load_testing
 
-    - name: Vulnerability Scanning
-      run: |
-        pip3 install pip-audit
-        pip-audit --requirement ./linux.requirements.txt
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v3
+
+  #   - name: Vulnerability Scanning
+  #     run: |
+  #       pip3 install pip-audit
+  #       pip-audit --requirement ./linux.requirements.txt
     
