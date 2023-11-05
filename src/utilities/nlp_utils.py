@@ -36,7 +36,6 @@ class nlp_utils:
 
         return temp.strip()
 
-
     # Model
     @property
     def model(self) -> Any:
