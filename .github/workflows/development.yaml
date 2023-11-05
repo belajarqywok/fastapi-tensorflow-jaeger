@@ -16,7 +16,7 @@ env:
 jobs:
   # Unit Testing
   unit_testing:
-    name: Testing
+    name: Unit Testing
     runs-on: ubuntu-latest
     environment: testing
 
@@ -26,7 +26,7 @@ jobs:
 
     - name: Unit Testing
       run: |
-        pip3 install nose2 nose2[coverage_plugin]
+        pip3 install nose2 nose2[coverage_plugin] numpy keras
         nose2 --start-dir tests \
           --verbose \
           --pretty-assert \
@@ -34,7 +34,7 @@ jobs:
 
   # Performance and Load Testing
   performance_and_load_testing:
-    name: Testing
+    name: Performance and Load Testing
     runs-on: ubuntu-latest
     environment: testing
     needs: unit_testing
@@ -94,7 +94,7 @@ jobs:
 
   # Vulnerability Scanning
   vulnerability_scanning:
-    name: Testing
+    name: Vulnerability Scanning
     runs-on: ubuntu-latest
     environment: testing
     needs: performance_and_load_testing
