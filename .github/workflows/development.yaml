@@ -88,8 +88,6 @@ jobs:
           if docker logs ml_service 2>&1 | grep -q "Application startup complete."; then
             echo "Application startup is complete. Stopping the loop."
             break
-          else
-            echo "Application startup is not complete. Continuing to check..."
           fi
           sleep 5
           clear
