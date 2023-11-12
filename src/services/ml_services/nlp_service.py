@@ -27,3 +27,4 @@ class nlp_service:
         return self.__NLP_UTILS.label_encoder.inverse_transform(
             [argmax(predict)]
         )[0]
+        

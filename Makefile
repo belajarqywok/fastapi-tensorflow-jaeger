@@ -14,4 +14,6 @@ postgres:
 jaeger-test:
 	uvicorn --host 0.0.0.0 --port 3000 --reload --workers 10 jaeger_test:app
 
+load_test:
+	locust --headless --run-time 10s --users 100 --spawn-rate 10 -H http://192.168.137.1:3000 --locustfile locust/configuration.py
 	
