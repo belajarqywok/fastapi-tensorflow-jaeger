@@ -39,7 +39,6 @@ jobs:
     name: Performance and Load Testing
     runs-on: ubuntu-latest
     environment: testing
-    needs: unit_testing
 
     steps:
     - name: Checkout
@@ -109,7 +108,6 @@ jobs:
     name: Vulnerability Scanning
     runs-on: ubuntu-latest
     environment: testing
-    needs: performance_and_load_testing
 
     steps:
     - name: Checkout

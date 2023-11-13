@@ -39,7 +39,7 @@ jobs:
     needs: testing
 
     env:
-      version: '1.0'
+      version: latest
       service: ml-service
       region: asia-southeast2
       project_id: ${{ secrets.GOOGLE_PROJECT }}
@@ -110,7 +110,7 @@ jobs:
       id: deploy-cloud-run
       with:
         service: ml-service
-        image: gcr.io/${{ secrets.GOOGLE_PROJECT }}/ml-service:1.0
+        image: gcr.io/${{ secrets.GOOGLE_PROJECT }}/ml-service:latest
         region: asia-southeast2
         flags: |
           --cpu=4 
@@ -118,17 +118,17 @@ jobs:
           --cpu-boost 
           --memory=4Gi 
           --timeout=800 
-          --concurrency=80 
+          --concurrency=80
           --min-instances=0 
           --max-instances=13 
           --project=${{ secrets.GOOGLE_PROJECT }} 
           --allow-unauthenticated 
           --vpc-egress=private-ranges-only 
-          --vpc-connector=projects/${{ secrets.GOOGLE_PROJECT }}/locations/asia-southeast2/connectors/ml-service-connector 
+          --vpc-connector=projects/${{ secrets.GOOGLE_PROJECT }}/locations/asia-southeast2/connectors/ml-service-connector
           --service-account=${{ secrets.CLOUD_RUN_SA }} 
 
         env_vars: |
-          VERSION=$version
+          VERSION=v1
           JWT_ACCESS_TOKEN_SECRET=${{ secrets.JWT_ACCESS_TOKEN_SECRET }}
           JWT_REFRESH_TOKEN_SECRET=${{ secrets.JWT_REFRESH_TOKEN_SECRET }}
           JWT_ALGORITHM=${{ secrets.JWT_ALGORITHM }}
@@ -140,5 +140,8 @@ jobs:
           POSTGRES_PASS=${{ secrets.POSTGRES_PASS }}
           POSTGRES_DB=${{ secrets.POSTGRES_DB }}
 
-    - name: 'Cloud Run URL Output'
-      run: 'echo "${{ steps.deploy-cloud-run.outputs.url }}"'
+    - name: Cloud Run URL Output
+      run: echo "${{ steps.deploy-cloud-run.outputs.url }}"
+
+    - name: Send Discord Notification
+      run: echo "send notification"

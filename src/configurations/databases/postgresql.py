@@ -12,6 +12,10 @@ class Engines:
     def __init__(self) -> None:
         # IP Engine
         self.ip_engine: Engine = create_engine(
+            pool_size = 10,
+            pool_timeout = 5,
+            max_overflow = 10,
+            pool_recycle = 3600,
             url = (
                 f'postgresql+psycopg2://' +
                 f'{os.getenv("POSTGRES_USER")}:{os.getenv("POSTGRES_PASS")}' +
@@ -22,7 +26,11 @@ class Engines:
 
         # UNIX Socket Engine
         self.unix_sock_engine: Engine = create_engine(
-            engine.url.URL.create(
+            pool_size = 10,
+            pool_timeout = 5,
+            max_overflow = 10,
+            pool_recycle = 3600,
+            url = engine.url.URL.create(
                 drivername = 'postgresql+psycopg2',
                 username = f'{os.getenv("POSTGRES_USER")}',
                 password = f'{os.getenv("POSTGRES_PASS")}',
